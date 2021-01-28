@@ -81,12 +81,8 @@ public final class NettyServer {
                 continue;
             }
 
-            List<String> outputList = new ArrayList<>(Arrays.asList(args));
-            outputList.remove(0);
-            String[] outputArgs = outputList.toArray(new String[0]);
-
             try {
-                command.executeCommand(outputArgs);
+                command.executeCommand(Arrays.copyOfRange(args, 1, args.length));
             } catch (Exception exception) {
                 LicenseLogger.logError("Unexpected error while execution command. " + exception.toString());
                 for (StackTraceElement stackTraceElement : exception.getStackTrace()) {

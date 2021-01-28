@@ -21,7 +21,7 @@ public final class RemoveTokenCommand extends Command {
 
     @Override
     public void executeCommand(String... args) {
-        UUID uuid = null;
+        UUID uuid;
         try {
             uuid = UUID.fromString(args[0]);
         } catch (Exception e) {

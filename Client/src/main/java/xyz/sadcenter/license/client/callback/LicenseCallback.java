@@ -7,9 +7,9 @@ package xyz.sadcenter.license.client.callback;
 
 public interface LicenseCallback {
 
-    void correct(String token);
+    void correct();
 
-    void incorrect(String token);
+    void incorrect();
 
     void disconnected(Throwable e);
 }

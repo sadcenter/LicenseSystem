@@ -39,11 +39,10 @@ public final class PacketEvent extends SimpleChannelInboundHandler {
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) {
         ByteBuf inBuffer = (ByteBuf) o;
 
-        String received = inBuffer.toString(CharsetUtil.UTF_8);
-        if (received.equals("true")) {
-            callback.correct(user);
+        if (inBuffer.readBoolean()) {
+            callback.correct();
         } else {
-            callback.incorrect(user);
+            callback.incorrect();
         }
     }
 }

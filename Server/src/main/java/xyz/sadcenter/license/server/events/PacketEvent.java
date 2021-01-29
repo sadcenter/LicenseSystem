@@ -33,11 +33,8 @@ public final class PacketEvent extends ChannelInboundHandlerAdapter {
         String received = byteBuf.toString(CharsetUtil.UTF_8);
         InetSocketAddress inet = (InetSocketAddress) channelHandlerContext.channel().remoteAddress();
 
-        if (received == null || received.length() != 36) {
+        if (received == null || received.length() < 300) {
             LicenseLogger.logError("Error while client " + inet.getAddress() + " try to connect (" + received + ")");
-            if(received != null) {
-                LicenseLogger.logError("Received length " + received.length() + ", expected 36!");
-            }
             channelHandlerContext.writeAndFlush(Unpooled.copiedBuffer("false", CharsetUtil.UTF_8));
             channelHandlerContext.disconnect();
             return;

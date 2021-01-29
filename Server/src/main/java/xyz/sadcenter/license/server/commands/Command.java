@@ -29,7 +29,7 @@ public abstract class Command {
         return command;
     }
 
-    public List<String> getAliases() {
+    public final List<String> getAliases() {
         return aliases;
     }
 

@@ -24,9 +24,6 @@ import java.net.InetSocketAddress;
 @ChannelHandler.Sharable
 public final class PacketEvent extends ChannelInboundHandlerAdapter {
 
-    private final ByteBuf VERIFIED_BUFFER = Unpooled.buffer().writeBoolean(true);
-    private final ByteBuf NOT_VERIFIED_BUFFER = Unpooled.buffer().writeBoolean(false);
-
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object message) {
         ByteBuf byteBuf = (ByteBuf) message;
@@ -34,9 +31,9 @@ public final class PacketEvent extends ChannelInboundHandlerAdapter {
         String received = byteBuf.toString(CharsetUtil.UTF_8);
         InetSocketAddress inet = (InetSocketAddress) channelHandlerContext.channel().remoteAddress();
 
-        if (received == null || received.length() > 300) {
+        if (received == null || received.length() > 300 || received.isEmpty()) {
             LicenseLogger.logError("Error while client " + inet.getAddress() + " try to connect (" + received + ")");
-            channelHandlerContext.writeAndFlush(NOT_VERIFIED_BUFFER.slice());
+            channelHandlerContext.writeAndFlush(Unpooled.buffer().writeBoolean(false).slice());
             channelHandlerContext.disconnect();
             return;
         }
@@ -44,10 +41,10 @@ public final class PacketEvent extends ChannelInboundHandlerAdapter {
         LicenseLogger.logInfo("New user connected from " + inet.getAddress() + ":" + inet.getPort());
         LicenseLogger.logInfo(inet.getAddress() + ":" + inet.getPort() + " -> Token " + received);
         if (Server.getServer().getConfiguration().getStorage().getAuthUsers().contains(received)) {
-            channelHandlerContext.writeAndFlush(VERIFIED_BUFFER.slice());
+            channelHandlerContext.writeAndFlush(Unpooled.buffer().writeBoolean(true).slice());
             LicenseLogger.logInfo(inet.getAddress() + ":" + inet.getPort() + " -> Logged in!");
         } else {
-            channelHandlerContext.writeAndFlush(NOT_VERIFIED_BUFFER.slice());
+            channelHandlerContext.writeAndFlush(Unpooled.buffer().writeBoolean(false).slice());
             LicenseLogger.logInfo(inet.getAddress() + ":" + inet.getPort() + " -> Cant find user!");
         }
     }

@@ -38,6 +38,10 @@ public final class PacketEvent extends ChannelInboundHandlerAdapter {
             return;
         }
 
+        if (!channelHandlerContext.channel().isActive() || !channelHandlerContext.channel().isOpen()) {
+            return;
+        }
+
         LicenseLogger.logInfo("New user connected from " + inet.getAddress() + ":" + inet.getPort());
         LicenseLogger.logInfo(inet.getAddress() + ":" + inet.getPort() + " -> Token " + received);
         if (Server.getServer().getConfiguration().getStorage().getAuthUsers().contains(received)) {
@@ -47,6 +51,7 @@ public final class PacketEvent extends ChannelInboundHandlerAdapter {
             channelHandlerContext.writeAndFlush(Unpooled.buffer().writeBoolean(false).slice());
             LicenseLogger.logInfo(inet.getAddress() + ":" + inet.getPort() + " -> Cant find user!");
         }
+        channelHandlerContext.close();
     }
 
     @Override

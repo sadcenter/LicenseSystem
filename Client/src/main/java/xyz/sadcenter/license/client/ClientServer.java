@@ -20,6 +20,8 @@ import java.net.InetSocketAddress;
 
 public final class ClientServer {
 
+    private Channel channel;
+
     @SneakyThrows
     void setup(final String host, final int port, final String token, final LicenseCallback callback) {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -35,9 +37,19 @@ public final class ClientServer {
 
             });
             ChannelFuture channelFuture = clientBootstrap.connect().sync();
+            channel = channelFuture.channel();
             channelFuture.channel().closeFuture().sync();
         } finally {
             group.shutdownGracefully().sync();
         }
     }
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void disconnect() {
+        channel.close();
+    }
+
 }

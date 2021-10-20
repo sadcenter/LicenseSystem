@@ -1,8 +1,8 @@
 # LicenseSystem
 License server and client system.
 
-## 21.10.2021
-I decided to archive this repository due this project is outdated and there is no point in creating new fixes, updates etc. cause the entire base system isn't written in the best way. I will make a new license system when I will have a little more free time.
+## Future project plans
+I decided to archive this repository (on 21.10.2021) due this project is outdated and there is no point in creating new fixes, updates etc. cause the entire base system isn't written in the best way. I will make a new license system when I will have a little more free time.
 Thanks for reading and using the project!
 
 ## Usage
